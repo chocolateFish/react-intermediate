@@ -1,4 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { startGameAction } from 'actions/actions';
+import { endGameAction } from 'actions/actions';
+import PropTypes from 'prop-types';
+
 
 import './controls.scss';
 
@@ -14,23 +19,33 @@ class Controls extends Component {
     };
 
     this.startGame = this.startGame.bind(this);
+    this.endGame = this.endGame.bind(this);
   }
 
   startGame () {
+    this.props.dispatch(startGameAction());
     this.setState({
       gameStartClass: '',
       gameInProgressClass: 'invisible',
       gameOverClass: 'hidden',
       gameTimer: setTimeout(
         () => {
-          this.setState({
-            gameStartClass: 'hidden',
-            gameInProgressClass: '',
-            gameOverClass: ''
-          });
+          this.endGame();
         },
         20000
       )
+    });
+  }
+
+  endGame () {
+    this.props.dispatch(endGameAction());
+
+    this.setState({
+      gameStartClass: 'hidden',
+      gameInProgressClass: '',
+      gameOverClass: '',
+      gameTimer: null
+
     });
   }
 
@@ -53,4 +68,12 @@ class Controls extends Component {
   }
 }
 
-export default Controls;
+Controls.propTypes = {
+  dispatch: PropTypes.func.isRequired
+};
+
+const mapStateToProps = () => {
+  return {};
+};
+
+export default connect(mapStateToProps)(Controls);

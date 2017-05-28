@@ -1,37 +1,33 @@
-import React, { Component } from 'react';
+import React, { Component, } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import holeMask from 'assets/img/hole-mask.svg';
+import { clickFrogAction } from 'actions/actions';
 import './hole.scss';
 
 class Hole extends Component {
   constructor (props) {
     super(props);
 
-    this.state = {
-      frogActive: false
-    };
-
-    this.toggleFrog = this.toggleFrog.bind(this);
+    this.frogClick = this.frogClick.bind(this);
   }
 
-  toggleFrog () {
-    this.setState({
-      frogActive: !this.state.frogActive
-    });
+  frogClick () {
+    this.props.dispatch(clickFrogAction(this.props.id));
   }
 
   render () {
     let frogClass = 'frog';
 
-    if (this.state.frogActive) {
+    if (this.props.active) {
       frogClass = 'frog up';
     }
 
     return (
       <div className="hole-container">
-        <button onClick={this.toggleFrog}>ACTIVATE</button>
         <div className="hole">
-          <div className={frogClass}></div>
+          <div className={frogClass} onClick={this.frogClick}></div>
           <img src={holeMask} className='hole-mask' />
         </div>
       </div>
@@ -39,4 +35,14 @@ class Hole extends Component {
   }
 }
 
-export default Hole;
+Hole.propTypes = {
+  active: PropTypes.bool.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  id: PropTypes.number.isRequired
+};
+
+const mapStateToProps = () => {
+  return {};
+};
+
+export default connect(mapStateToProps)(Hole);

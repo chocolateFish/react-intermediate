@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import Hole from 'components/hole/hole';
 import Score from 'components/score/score';
@@ -9,8 +11,8 @@ class Homepage extends Component {
   render () {
     let holes = [];
 
-    for (let i = 0; i < 5; i++) {
-      holes.push(<Hole key={'hole-' + i} id={i} />);
+    for (let i = 0; i < this.props.holeState.length; i++) {
+      holes.push(<Hole key={'hole-' + i} id={i} active={this.props.holeState[i]} />);
     }
 
     return (
@@ -36,4 +38,15 @@ class Homepage extends Component {
   }
 }
 
-export default Homepage;
+const mapStateToProps = (state) => {
+  const { game } = state;
+  const { holeState } = game;
+
+  return { holeState };
+};
+
+Homepage.propTypes = {
+  holeState: PropTypes.array.isRequired
+};
+
+export default connect(mapStateToProps)(Homepage);
