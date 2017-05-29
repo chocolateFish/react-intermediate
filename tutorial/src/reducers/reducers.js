@@ -1,11 +1,12 @@
 import { combineReducers } from 'redux';
-import { START_GAME, ALTER_HOLES, END_GAME } from 'actions/actions';
+import { START_GAME, ALTER_HOLES, END_GAME, INCREMENT_SCORE } from 'actions/actions';
 
 export const holesLength = 5;
 
 const initialGameState = {
   holeState: Array(holesLength).fill(false),
-  isGameActive: false
+  isGameActive: false,
+  scoreCount: 0
 };
 
 const game = (state = initialGameState, action) => {
@@ -20,6 +21,10 @@ const game = (state = initialGameState, action) => {
     });
   case END_GAME:
     return Object.assign({}, state=initialGameState, {
+    });
+  case INCREMENT_SCORE:
+    return Object.assign({}, state, {
+      scoreCount: action.scoreCount
     });
   default:
     return state;

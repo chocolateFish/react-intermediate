@@ -3,6 +3,7 @@ import { holesLength } from 'reducers/reducers';
 export const START_GAME = 'START_GAME';
 export const ALTER_HOLES = 'ALTER_HOLES';
 export const END_GAME = 'END_GAME';
+export const INCREMENT_SCORE = 'INCREMENT_SCORE';
 
 const startGame = () => {
   return {
@@ -17,14 +18,25 @@ const alterHoles = (holeState) => {
   };
 };
 
-const endGame= () =>{
+const endGame = () =>{
   return {
     type: END_GAME
   };
 };
 
+const incrementScore = (scoreCount) => {
+  return {
+    type: INCREMENT_SCORE,
+    scoreCount: scoreCount
+  };
+};
+
 const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min;
+};
+
+const increment = (score) => {
+  return ++score;
 };
 
 export const startGameAction = () => {
@@ -44,11 +56,15 @@ export const endGameAction = () => {
 };
 
 export const clickFrogAction = (frogId) => {
-  return (dispatch, getState) => {
+  return (dispatch, getState) => { // get current state
+    //copy the array, hide frog, dispatch the new state
     let newState = getState().game.holeState.slice(0);
-
-    newState[frogId] = false;
+    newState[frogId] = false; 
     dispatch(alterHoles(newState));
+
+    //get count and increment
+    let newCount = increment(getState().game.scoreCount);
+    dispatch(incrementScore(newCount));
 
     setTimeout(
       () => {
